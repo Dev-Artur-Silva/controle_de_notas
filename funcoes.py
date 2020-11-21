@@ -12,3 +12,4 @@ def cadastrar_disciplina(excel_disciplinas, codigo, nome, matricula_professor):
 
 def cadastrar_notas(excel_notas, codigo, matricula_aluno, nota1, nota2):
     linha = [codigo, matricula_aluno, nota1, nota2]
+    excel_notas.loc[len(excel_notas)] = linha
