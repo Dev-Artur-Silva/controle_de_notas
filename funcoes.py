@@ -1,3 +1,5 @@
+import pandas as pd
+
 def cadastrar_professor(excel_professores, nome, matricula, data):
     linha = [nome, matricula, data]
     excel_professores.loc[len(excel_professores)] = linha
@@ -20,14 +22,14 @@ def relatorio_notas(excel_disciplinas, excel_notas, excel_professores, excel_alu
     for posicao_disciplina, linha_disciplina in excel_disciplinas.iterrows():
         print()
         for posicao_professor, linha_professor in excel_professores.iterrows():
+
+            if linha_disciplina['Matricula do Professor'] == linha_professor['Matricula']:
+
+                print('Disciplina:', linha_disciplina['Nome'],', Nome do Professor:',linha_professor['Nome'])
             
-            for posicao_notas, linha_notas in excel_notas.iterrows():
+                for posicao_notas, linha_notas in excel_notas.iterrows():
 
-                for posicao_alunos, linha_alunos in excel_alunos.iterrows():
-
-                    if linha_disciplina['Matricula do Professor'] == linha_professor['Matricula']:
-
-                        print('Disciplina:', linha_disciplina['Nome'],', Nome do Professor:',linha_professor['Nome'])
+                    for posicao_alunos, linha_alunos in excel_alunos.iterrows():
 
                         if linha_disciplina['Codigo'] == linha_notas['Codigo da Disciplina']:
 
@@ -65,9 +67,14 @@ def menu_um(excel_professores, excel_alunos):
                 print('Digite no formato dd/mm/aaaa')
                 continue
 
+            elif data[2] != '/' and data[5] != '/':
+                print('Digite no formato dd/mm/aaaa')
+                continue
+
             break
         
         cadastrar_professor(excel_professores, nome, matricula, data)
+        print('\nProfessor cadastrado!\n')
         break
 
 def menu_dois(excel_professores, excel_alunos):
@@ -98,10 +105,15 @@ def menu_dois(excel_professores, excel_alunos):
             if len(data) != 10:
                 print('Digite no formato dd/mm/aaaa')
                 continue
+            
+            elif data[2] != '/' and data[5] != '/':
+                print('Digite no formato dd/mm/aaaa')
+                continue
 
             break
 
         cadastrar_aluno(excel_alunos, nome, matricula, data)
+        print('\nAluno cadastrado!\n')
         break
 
 def menu_tres(excel_disciplinas, excel_professores):
@@ -139,6 +151,8 @@ def menu_tres(excel_disciplinas, excel_professores):
                 
                 elif matricula in excel_disciplinas.values:
                     print('Esse professor ja e professor de uma disciplina.')
+                    continue
+
                 break
 
             except ValueError:
@@ -148,6 +162,7 @@ def menu_tres(excel_disciplinas, excel_professores):
                 break
 
         cadastrar_disciplina(excel_disciplinas, codigo, nome, matricula)
+        print("\nDisciplina cadastrada!\n")
         break
 
 def menu_quatro(excel_disciplinas, excel_alunos, excel_notas):
@@ -173,7 +188,9 @@ def menu_quatro(excel_disciplinas, excel_alunos, excel_notas):
 
         while True:    
             try:
-                matricula = int(input('Digite a matricula do Aluno: '))
+                var = False
+                matricula = int(input('Digite a matricula do Aluno(0 para sair): '))
+
                 if matricula == 0:
                     break
                 
@@ -184,7 +201,10 @@ def menu_quatro(excel_disciplinas, excel_alunos, excel_notas):
                 for posicao_notas, linha_notas in excel_notas.iterrows():
                     if codigo == linha_notas['Codigo da Disciplina'] and matricula == linha_notas['Matricula do Aluno']:
                         print('Aluno ja cadastrado nesta disciplina.')
-                        continue
+                        var = True
+
+                if var == True:
+                    continue
 
                 break
 
@@ -204,4 +224,16 @@ def menu_quatro(excel_disciplinas, excel_alunos, excel_notas):
                 print('Digite um valor valido.')
                 
         cadastrar_notas(excel_notas, codigo, matricula, nota1, nota2)
+        print('\nNotas cadastradas!\n')
         break
+
+def salvar_dados(excel_disciplinas, excel_notas, excel_professores, excel_alunos):
+    # Criar objeto para leitura e selecionar planilha
+    # Criar objeto para escrita
+    excel_writer = pd.ExcelWriter("dados.xlsx")
+    excel_professores.to_excel(excel_writer, 'Professores', index=False)
+    excel_alunos.to_excel(excel_writer, 'Alunos', index=False)
+    excel_disciplinas.to_excel(excel_writer, 'Disciplinas', index=False)
+    excel_notas.to_excel(excel_writer, 'Notas', index=False)
+    # Salvar e fechar arquivo
+    excel_writer.save()

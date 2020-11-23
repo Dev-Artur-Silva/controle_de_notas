@@ -18,7 +18,7 @@ def menu():
         3 - Cadastro de Disciplinas
         4 - Cadastro de Notas
         5 - Relatorio de Notas (por disciplina)
-        0 - Para salvar e sair
+        0 - Sair
         ''')
 
         try:
@@ -35,18 +35,22 @@ def menu():
         if (menu == 1):
             #Cadastro de Professores (Nome, matrícula, data de nascimento)
             funcoes.menu_um(excel_professores, excel_alunos)
+            funcoes.salvar_dados(excel_disciplinas, excel_notas, excel_professores, excel_alunos)
 
         elif (menu == 2):
             #Cadastro de Alunos (Nome, matrícula, data de nascimento)
             funcoes.menu_dois(excel_professores, excel_alunos)
+            funcoes.salvar_dados(excel_disciplinas, excel_notas, excel_professores, excel_alunos)
 
         elif (menu == 3):
             #Cadastro de Disciplinas (Código, nome, matrícula do professor)
             funcoes.menu_tres(excel_disciplinas, excel_professores)
+            funcoes.salvar_dados(excel_disciplinas, excel_notas, excel_professores, excel_alunos)
 
         elif (menu == 4):
             #Cadastro de Notas (Código da Disciplina, matrícula do aluno, Nota 1, Nota2)
             funcoes.menu_quatro(excel_disciplinas, excel_alunos, excel_notas)
+            funcoes.salvar_dados(excel_disciplinas, excel_notas, excel_professores, excel_alunos)
 
         elif (menu == 5):
                 #o Imprimir a disciplina, professor da disciplina, relação dos alunos e
@@ -54,16 +58,6 @@ def menu():
             funcoes.relatorio_notas(excel_disciplinas, excel_notas, excel_professores, excel_alunos)
             
         elif (menu == 0):
-            # Criar objeto para leitura e selecionar planilha
-
-            # Criar objeto para escrita
-            excel_writer = pd.ExcelWriter("dados.xlsx")
-
-            excel_professores.to_excel(excel_writer, 'Professores', index=False)
-            excel_alunos.to_excel(excel_writer, 'Alunos', index=False)
-            excel_disciplinas.to_excel(excel_writer, 'Disciplinas', index=False)
-            excel_notas.to_excel(excel_writer, 'Notas', index=False)
-            # Salvar e fechar arquivo
-            excel_writer.save()
             break
+
 menu()
