@@ -89,8 +89,8 @@ def menu_dois(excel_professores, excel_alunos):
                     break
 
                 elif matricula in excel_professores.values or matricula in excel_alunos.values:
-                        print('Matricula ja cadastrada.')
-                        continue
+                    print('Matricula ja cadastrada.')
+                    continue
 
                 break
 
@@ -98,7 +98,7 @@ def menu_dois(excel_professores, excel_alunos):
                 print('Apenas numeros.')
         
         if matricula == 0:
-                    break
+            break
 
         while True:
             data = input('Digite a data de nascimento (dd/mm/aaaa): ')
@@ -125,7 +125,7 @@ def menu_tres(excel_disciplinas, excel_professores):
                 if codigo == 0:
                     break
 
-                if codigo in excel_disciplinas.values:
+                elif codigo in excel_disciplinas.values:
                     print('Disciplina ja cadastrada.')
                     continue
 
@@ -159,7 +159,7 @@ def menu_tres(excel_disciplinas, excel_professores):
                 print('Apenas numeros.')
 
         if matricula == 0:
-                break
+            break
 
         cadastrar_disciplina(excel_disciplinas, codigo, nome, matricula)
         print("\nDisciplina cadastrada!\n")
