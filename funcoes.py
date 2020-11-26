@@ -45,12 +45,24 @@ def menu_um(excel_professores, excel_alunos):
     while True:
         while True:
             try:
+                var = False
                 matricula = int(input('Digite a matricula do Professor(0 para sair): '))
                 if matricula == 0:
                     break
 
-                elif matricula in excel_professores.values or matricula in excel_alunos.values:
-                    print('Matricula ja cadastrada.')
+                for posicao_professor, linha_professor in excel_professores.iterrows():
+                    if matricula == linha_professor['Matricula']:
+                        print('Matricula ja cadastrada')
+                        var = True
+                        continue
+
+                for posicao_alunos, linha_alunos in excel_alunos.iterrows():
+                    if matricula == linha_alunos['Matricula']:
+                        print('Matricula ja cadastrada.')
+                        var = True
+                        continue
+
+                if var == True:
                     continue
 
                 break
@@ -83,13 +95,23 @@ def menu_dois(excel_professores, excel_alunos):
         nome = input('Digite o nome do Aluno: ').capitalize()
         while True:
             try:
+                var = False
                 matricula = int(input('Digite a matricula do Aluno(0 para sair): '))
                 
                 if matricula == 0:
                     break
 
-                elif matricula in excel_professores.values or matricula in excel_alunos.values:
-                    print('Matricula ja cadastrada.')
+                for posicao_professor, linha_professor in excel_professores.iterrows():
+                    if matricula == linha_professor['Matricula']:
+                        print('Matricula ja cadastrada')
+                        var = True
+                    
+                for posicao_alunos, linha_alunos in excel_alunos.iterrows():
+                    if matricula == linha_alunos['Matricula']:
+                        print('Matricula ja cadastrada.')
+                        var = True
+                
+                if var == True:
                     continue
 
                 break
@@ -121,12 +143,18 @@ def menu_tres(excel_disciplinas, excel_professores):
 
         while True:
             try:
+                var = False
                 codigo = int(input('Digite o codigo da disciplina(0 para sair): '))
                 if codigo == 0:
                     break
 
-                elif codigo in excel_disciplinas.values:
-                    print('Disciplina ja cadastrada.')
+                for posicao_disciplina, linha_disciplina in excel_disciplinas.iterrows():
+                    if codigo == linha_disciplina['Codigo']:
+                        print('Codigo ja cadastrado.')
+                        var = True
+                        break
+                
+                if var == True:
                     continue
 
                 break
@@ -141,16 +169,22 @@ def menu_tres(excel_disciplinas, excel_professores):
 
         while True:
             try:
+                var = True
                 matricula = int(input('Digite a matricula do Professor(0 para sair): '))
                 if matricula == 0:
                     break
 
-                elif matricula not in excel_professores.values:
-                    print('Professor nao cadastrado.')
-                    continue
+                for posicao_professor, linha_professor in excel_professores.iterrows():
+                    if matricula == linha_professor['Matricula']:
+                        var = False
                 
-                elif matricula in excel_disciplinas.values:
-                    print('Esse professor ja e professor de uma disciplina.')
+                for posicao_disciplina, linha_disciplina in excel_disciplinas.iterrows():
+                    if matricula == linha_disciplina['Matricula do Professor']:
+                        var = True
+                        break
+                
+                if var == True:
+                    print('Nao ha professor com essa matricula ou Professor ja cadastrado como professor de uma disciplina.')
                     continue
 
                 break
@@ -170,14 +204,19 @@ def menu_quatro(excel_disciplinas, excel_alunos, excel_notas):
 
         while True:
             try:
+                var = True
                 codigo = int(input('Digite o codigo da disciplina(0 para sair): '))
                 if codigo == 0:
                     break
-
-                elif codigo not in excel_disciplinas.values:
-                    print('Disciplina nao cadastrada.')
+                
+                for posicao_disciplina, linha_disciplina in excel_disciplinas.iterrows():
+                    if linha_disciplina['Codigo'] == codigo:
+                        var = False
+                        break
+                
+                if var == True:
+                    print('Disciplina ainda nao cadastrada.')
                     continue
-
                 break
 
             except ValueError:
@@ -194,16 +233,19 @@ def menu_quatro(excel_disciplinas, excel_alunos, excel_notas):
                 if matricula == 0:
                     break
                 
-                elif matricula not in excel_alunos.values:
-                    print('Aluno nao cadastrado.')
-                    continue
+                for posicao_alunos, linha_alunos in excel_alunos.iterrows():
+                    if matricula == linha_alunos['Matricula']:
+                        var = False
+                        break
+                    else:
+                        var = True
 
                 for posicao_notas, linha_notas in excel_notas.iterrows():
                     if codigo == linha_notas['Codigo da Disciplina'] and matricula == linha_notas['Matricula do Aluno']:
-                        print('Aluno ja cadastrado nesta disciplina.')
                         var = True
 
                 if var == True:
+                    print('Aluno nao cadastrado ou Aluno ja cadastrado nesta disciplina.')
                     continue
 
                 break
